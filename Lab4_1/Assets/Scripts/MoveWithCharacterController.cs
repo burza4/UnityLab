@@ -10,11 +10,13 @@ public class MoveWithCharacterController : MonoBehaviour
     private float playerSpeed = 10.0f;
     private float jumpHeight = 1.0f;
     private float gravityValue = -9.81f;
+    private Rigidbody rb;
 
     private void Start()
     {
         // zakładamy, że komponent CharacterController jest już podpięty pod obiekt
         controller = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -54,5 +56,16 @@ public class MoveWithCharacterController : MonoBehaviour
         // okazuje się, że jest to zbyt wolne opadanie, więc zastosowano g * t-kwadrat
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "JumpBoard")
+        {
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue*3);
+        }
+        if(other.gameObject.tag == "Obstacle")
+        {
+            print("Beng");
+        }
     }
 }
